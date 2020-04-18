@@ -1,0 +1,25 @@
+version: "3.6"
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  graphql-engine:
+    image: hasura/graphql-engine:v1.2.0-beta.3
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "postgres"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://weeqgnqe:lOGKSmQm4EmxABEjiMeSZBMITDIXMW9I@balarama.db.elephantsql.com:5432/weeqgnqe
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_JWT_SECRET: '{"type": "RS512", "key": "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA4KLJu4O1FteCI98kV0FM\ni7g1QElB+bVH7rdiXb1JluFHg+JDouDGlP3HHRQUO2Wb50TjrLDJBSD8bkY7bd20\niJ8fGY4zqMUInWSWdFa7PhP63nCXQ7gjb+2VXlKhIJFqYbzxH3pq/89t29LlThXG\n+9Tof6Y//TH2F9n1u9NJgNFyCG1n1XE4wcxllINOnqSWOxLeQJorI9DrjlgIpQ/N\nrDYM8Gij+B9F4M2PDpTlKO/NjUlwCQSQZ5tPAFCSnMj0fVtjJ/JXtpZcBUkmp7ax\n/TfVz0J5nW57M5d81H9zOTYWui5M50PNbcmoXfjFiswXVHXhibZ4p+QrAY+1oiD1\ndIaVjzAsEQEJVxx/zjNvkxl/NpgH9mCj9mv+gRHLFv0pHb/5iDRs1cOHmPXtifay\nnBQsUcVqvujOyAsGlZcDD94FbuCCOYeuc12rOvCWpcU3HzE4tm01cEil4Kmz5vyg\nuulzUpDCmS/+J4yevgrbrE3k7e45J6EY5pkaw68hdycyG0rCzlmOK4QfSjgCAzJY\npafQcGC1kuTu7/ClVn5alKdx5tG4FcdpmLBbtT6H5015UHefeI6LShsjh3LB4gde\nVGf+QVDOXniFaHoymYszR0/1DQ3rAWg62sGRQhs1EUZkGF7Wek5l/sFGHyuAhR9N\n/C0aTd78CsAH8ec+icXIfhECAwEAAQ==\n-----END PUBLIC KEY-----\n"}'
+      # HASURA_GRAPHQL_AUTH_HOOK: http://host.docker.internal:4000/webhook
+volumes:
+  db_data:
